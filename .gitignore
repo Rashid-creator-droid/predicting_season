@@ -209,9 +209,5 @@ __marimo__/
 # Dataset
 
 
-*/train
-*/dataset/train/
-*/dataset/validation/
-/validation/
-*/validation
+
 */logs/
