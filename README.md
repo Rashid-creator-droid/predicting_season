@@ -262,8 +262,7 @@ PRETRAINED = True
 ```bash
     cd predicting_season
 ```
-### Запустить сборку контейнера Docker Compose V2
-По умолчанию проект использует образ из Docker Hub. Для запуска:
+### Запустить сборку контейнера Docker Compose
 ```bash
     docker compose up --build
 ``` 
