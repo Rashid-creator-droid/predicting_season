@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./dataset:/app/ml/dataset
+      - ./logs:/app/ml/logs
+      - ./weights:/app/weights
+    environment:
+      - PYTHONPATH=/app
