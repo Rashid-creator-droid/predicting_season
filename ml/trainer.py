@@ -9,8 +9,9 @@ import torch.optim as optim
 from tqdm import tqdm
 from torchvision.datasets import ImageFolder
 from PIL import ImageFile
+import matplotlib.pyplot as plt
 
-from .models.models import get_model
+from .models import get_model
 from .loaders import DatasetManager
 from .transforms import get_train_transforms, get_val_transforms
 from .config import (
@@ -26,6 +27,7 @@ from .config import (
     MODEL_NAME,
     PRETRAINED,
     EARLY_STOPPING_PATIENCE,
+    CLASS_TO_IDX_PATH,
     logger
 )
 
@@ -133,11 +135,7 @@ class Trainer:
             val_acc_list.append(val_acc)
 
             logger.info(
-                f"Epoch [{epoch + 1}/{self.epochs}] Train Acc{train_acc:.4f} Val Acc{val_acc:.4f}",
-                epoch + 1,
-                self.epochs,
-                train_acc,
-                val_acc,
+                f"Epoch [{epoch}/{self.epochs}] Train Acc {train_acc:.4f} Val Acc {val_acc:.4f}"
             )
             print(f"Epoch [{epoch + 1}/{self.epochs}] Train Acc{train_acc:.4f} Val Acc{val_acc:.4f}")
 
@@ -149,20 +147,50 @@ class Trainer:
             else:
                 no_improve += 1
 
-            if self.early_stopping_patience and no_improve >= self.early_stopping_patience:
-                logger.info(f"Early stopping")
-                break
-
         dataset = ImageFolder(root=TRAIN_DIR)
-        with open("class_to_idx.json", "w") as f:
+        with open(CLASS_TO_IDX_PATH, "w") as f:
             json.dump(dataset.class_to_idx, f)
 
+        self.plot_metrics(
+            train_losses=train_loss_list,
+            val_losses=val_loss_list,
+            train_accuracies=train_acc_list,
+            val_accuracies=val_acc_list
+        )
 
+    def plot_metrics(
+        self,
+        train_losses,
+        val_losses,
+        train_accuracies,
+        val_accuracies
+    ):
+        epochs_range = range(1, len(train_accuracies) + 1)
+
+        plt.figure(figsize=(10, 5))
+        plt.subplot(1, 2, 1)
+        plt.plot(epochs_range, train_accuracies, label='Train Accuracy')
+        plt.plot(epochs_range, val_accuracies, label='Validation Accuracy')
+        plt.xlabel('Epochs')
+        plt.ylabel('Accuracy')
+        plt.title('Training and Validation Accuracy')
+        plt.legend()
+        plt.subplot(1, 2, 2)
+        plt.plot(epochs_range, train_losses, label='Train Loss')
+        plt.plot(epochs_range, val_losses, label='Validation Loss')
+        plt.xlabel('Epochs')
+        plt.ylabel('Loss')
+        plt.title('Training and Validation Loss')
+        plt.legend()
+
+        plt.tight_layout()
+        plt.show()
 
 def quick_train(learning_rate: float = LEARNING_RATE, epochs: int = EPOCHS, batch_size: int = BATCH_SIZE) -> None:
     trainer = Trainer(learning_rate=learning_rate, epochs=epochs, batch_size=batch_size)
     trainer.train()
 
 if __name__ == "__main__":
+    
     quick_train()
     
