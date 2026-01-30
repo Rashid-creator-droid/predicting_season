@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Season classifier</title>
+    <title>Prediction Season</title>
 </head>
 <body>
     <h2>Определение времени года</h2>
@@ -12,11 +12,10 @@
     <p id="confidence"></p>
     <img id="preview"
          src=""
-         alt="Загруженное изображение"
          style="max-width:300px; display:none; margin-top:10px;">
 
     <hr>
-    <h3>Тест на всем тестовом датасете</h3>
+    <h3>Тест на всем тестовом датасёте</h3>
     <button onclick="testDataset()">Построить матрицу ошибок</button>
     <p id="dataset_accuracy"></p>
     <img id="cm_preview" src=""
@@ -61,7 +60,7 @@
             const data = await response.json();
 
             document.getElementById("dataset_accuracy").innerText =
-                "Accuracy на тестовом датасете: " + (data.accuracy * 100).toFixed(2) + "%";
+                "Accuracy на тестовом датасёте: " + (data.accuracy * 100).toFixed(2) + "%";
                 
             const cmImg = document.getElementById("cm_preview");
             cmImg.src = "data:image/png;base64," + data.cm_image;
