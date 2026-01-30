@@ -1,14 +1,14 @@
-from fastapi import FastAPI, UploadFile, File
+import io
+
+import uvicorn
+from fastapi import FastAPI, File, UploadFile
+from fastapi.requests import Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from fastapi.requests import Request
 from PIL import Image
-import io
-import uvicorn
 
-from ml.predict import SeasonPredictor
 from ml.loaders import DatasetManager
-
+from ml.predict import SeasonPredictor
 
 app = FastAPI()
 templates = Jinja2Templates(directory="app/templates")
@@ -39,4 +39,3 @@ async def test_dataset():
 
 if __name__ == "__main__":
     uvicorn.run("main:app", reload=True, port=8001)
-

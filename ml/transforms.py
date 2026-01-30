@@ -1,5 +1,7 @@
 from torchvision import transforms
+
 from .config import IMAGENET_MEAN, IMAGENET_STD
+
 
 def get_train_transforms():
     return transforms.Compose([

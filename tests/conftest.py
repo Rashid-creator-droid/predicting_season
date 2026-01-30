@@ -1,8 +1,11 @@
+import io
+
 import pytest
 from fastapi.testclient import TestClient
 from PIL import Image
-import io
+
 from main import app
+
 
 @pytest.fixture
 def client():

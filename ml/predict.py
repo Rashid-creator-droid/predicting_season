@@ -4,20 +4,36 @@ from typing import Tuple
 import torch
 from PIL import Image
 
-from .eval_test import Evaluator, plot_confusion_matrix
+from .config import (
+    BEST_MODEL_PATH, 
+    CLASS_TO_IDX_PATH, 
+    DEVICE, 
+    MODEL_NAME,
+    NUM_CLASSES, 
+    PRETRAINED,
+)
+from .eval_test import Evaluator
 from .loaders import DatasetManager
 from .models import get_model
-from .config import DEVICE, NUM_CLASSES, PRETRAINED, MODEL_NAME, BEST_MODEL_PATH, CLASS_TO_IDX_PATH
 from .transforms import get_pred_transforms
 
 
 class SeasonPredictor:
-    def __init__(self, class_map_path: str = None, model_path: str = BEST_MODEL_PATH, device: torch.device = None) -> None:
+    def __init__(
+        self, 
+        class_map_path: str = None, 
+        model_path: str = BEST_MODEL_PATH, 
+        device: torch.device = None,
+    ) -> None:
         if class_map_path is None:
             class_map_path = CLASS_TO_IDX_PATH
         self.device = device or DEVICE
 
-        self.model = get_model(MODEL_NAME, num_classes=NUM_CLASSES, pretrained=PRETRAINED)
+        self.model = get_model(
+            MODEL_NAME, 
+            num_classes=NUM_CLASSES, 
+            pretrained=PRETRAINED,
+        )
         self.model.load_state_dict(torch.load(model_path, map_location=self.device))
         self.model.to(self.device)
         self.model.eval()
@@ -43,5 +59,5 @@ class SeasonPredictor:
         test_loader = DatasetManager().get_test_loader()
         evaluator = Evaluator(self.model, self.device)
         cm, report, accuracy = evaluator.evaluate(test_loader)
-        plot = plot_confusion_matrix(cm, classes=self.class_names)
+        plot = evaluator.plot_confusion_matrix(cm, classes=self.class_names)
         return plot, accuracy

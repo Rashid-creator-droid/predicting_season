@@ -4,10 +4,8 @@ from datetime import datetime
 
 import torch
 
-
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-PRETRAINED = True
 MODEL_NAME = "resnet18"
 
 NUM_CLASSES = 4
@@ -31,7 +29,6 @@ CLASS_TO_IDX_PATH = os.path.join(WEIGHTS_DIR, "class_to_idx.json")
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# Logger settings
 current_time = datetime.now().strftime("%Y-%m-%d_%H-%M")
 log_file_path = f"learning_{current_time}.log"
 os.makedirs(os.path.join(BASE_DIR, "logs"), exist_ok=True)
