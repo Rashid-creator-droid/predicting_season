@@ -12,16 +12,22 @@ MODEL_NAME = "resnet18"
 
 NUM_CLASSES = 4
 BATCH_SIZE = 32
-EPOCHS = 20
+EPOCHS = 10
 LEARNING_RATE = 0.0001
 EARLY_STOPPING_PATIENCE = 5
 SEED = 42
 
-TRAIN_DIR = os.path.join(BASE_DIR, "dataset", "train")
-VAL_DIR = os.path.join(BASE_DIR, "dataset", "validation")
-TEST_DIR = os.path.join(BASE_DIR, "dataset", "test")
+IMAGENET_MEAN = [0.485, 0.456, 0.406]
+IMAGENET_STD = [0.229, 0.224, 0.225]
+
+DATA_SET_DIR = os.path.join(BASE_DIR, "dataset")
+TRAIN_DIR = os.path.join(DATA_SET_DIR, "train")
+VAL_DIR = os.path.join(DATA_SET_DIR, "validation")
+TEST_DIR = os.path.join(DATA_SET_DIR, "test")
+
 WEIGHTS_DIR = os.path.join(BASE_DIR, "weights")
 BEST_MODEL_PATH = os.path.join(WEIGHTS_DIR, "best_model.pth")
+CLASS_TO_IDX_PATH = os.path.join(WEIGHTS_DIR, "class_to_idx.json")
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
