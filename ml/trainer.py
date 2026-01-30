@@ -21,7 +21,6 @@ from .config import (
     LEARNING_RATE,
     MODEL_NAME, 
     NUM_CLASSES, 
-    PRETRAINED, 
     SEED, 
     TRAIN_DIR,
     VAL_DIR, 
@@ -41,7 +40,6 @@ class Trainer:
         device: torch.device = DEVICE,
         model_name: str = MODEL_NAME,
         num_classes: int = NUM_CLASSES,
-        pretrained: bool = PRETRAINED,
         train_dir: str = TRAIN_DIR,
         val_dir: str = VAL_DIR,
         best_model_path: str = BEST_MODEL_PATH,
@@ -63,7 +61,7 @@ class Trainer:
         torch.backends.cudnn.benchmark = False
         torch.backends.cudnn.deterministic = True
 
-        self.model = get_model(model_name, num_classes, pretrained).to(self.device)
+        self.model = get_model(model_name, num_classes).to(self.device)
 
         dataset_manager = DatasetManager(
             train_dir=train_dir,
