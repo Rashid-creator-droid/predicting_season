@@ -13,7 +13,7 @@ from ml.loaders import DatasetManager
 app = FastAPI()
 templates = Jinja2Templates(directory="app/templates")
 
-predictor = SeasonPredictor(class_map_path="class_to_idx.json")
+predictor = SeasonPredictor()
 dataset_manager = DatasetManager()
 
 
