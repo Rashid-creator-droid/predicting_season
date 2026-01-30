@@ -210,8 +210,8 @@ __marimo__/
 
 
 */train
-/dataset/train/
-/dataset/validation/
+*/dataset/train/
+*/dataset/validation/
 /validation/
 */validation
 */logs/
