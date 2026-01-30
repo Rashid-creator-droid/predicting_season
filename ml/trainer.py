@@ -1,35 +1,35 @@
 import json
+import random
 from typing import List
 
+import matplotlib.pyplot as plt
 import numpy as np
-import random
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from tqdm import tqdm
-from torchvision.datasets import ImageFolder
 from PIL import ImageFile
-import matplotlib.pyplot as plt
+from torchvision.datasets import ImageFolder
+from tqdm import tqdm
 
-from .models import get_model
-from .loaders import DatasetManager
-from .transforms import get_train_transforms, get_val_transforms
 from .config import (
-    BATCH_SIZE,
-    EPOCHS,
-    LEARNING_RATE,
-    SEED,
-    TRAIN_DIR,
-    VAL_DIR,
-    BEST_MODEL_PATH,
+    BATCH_SIZE, 
+    BEST_MODEL_PATH, 
+    CLASS_TO_IDX_PATH, 
     DEVICE,
-    NUM_CLASSES,
-    MODEL_NAME,
-    PRETRAINED,
-    EARLY_STOPPING_PATIENCE,
-    CLASS_TO_IDX_PATH,
-    logger
+    EARLY_STOPPING_PATIENCE, 
+    EPOCHS, 
+    LEARNING_RATE,
+    MODEL_NAME, 
+    NUM_CLASSES, 
+    PRETRAINED, 
+    SEED, 
+    TRAIN_DIR,
+    VAL_DIR, 
+    logger,
 )
+from .loaders import DatasetManager
+from .models import get_model
+from .transforms import get_train_transforms, get_val_transforms
 
 
 class Trainer:
@@ -68,11 +68,11 @@ class Trainer:
         dataset_manager = DatasetManager(
             train_dir=train_dir,
             val_dir=val_dir,
-            batch_size=batch_size
+            batch_size=batch_size,
         )
         self.train_loader, self.val_loader = dataset_manager.get_dataloaders(
             get_train_transforms(),
-            get_val_transforms()
+            get_val_transforms(),
         )
 
         ImageFile.LOAD_TRUNCATED_IMAGES = True
@@ -97,7 +97,10 @@ class Trainer:
             correct = 0
             total = 0
 
-            for images, labels in tqdm(self.train_loader, desc=f"Epoch {epoch+1}/{self.epochs} - train"):
+            for images, labels in tqdm(
+                self.train_loader, 
+                desc=f"Epoch {epoch+1}/{self.epochs} - train",
+            ):
                 images, labels = images.to(self.device), labels.to(self.device)
 
                 self.optimizer.zero_grad()
@@ -120,7 +123,10 @@ class Trainer:
             val_running_loss = 0.0
             correct, total = 0, 0
             with torch.no_grad():
-                for images, labels in tqdm(self.val_loader, desc=f"Epoch {epoch+1}/{self.epochs} - val"):
+                for images, labels in tqdm(
+                    self.val_loader, 
+                    desc=f"Epoch {epoch+1}/{self.epochs} - val",
+                ):
                     images, labels = images.to(self.device), labels.to(self.device)
                     outputs = self.model(images)
                     loss = self.criterion(outputs, labels)
@@ -135,9 +141,9 @@ class Trainer:
             val_acc_list.append(val_acc)
 
             logger.info(
-                f"Epoch [{epoch}/{self.epochs}] Train Acc {train_acc:.4f} Val Acc {val_acc:.4f}"
+                f"Epoch[{epoch}/{self.epochs}]Train Acc {train_acc:.4f} Val Acc {val_acc:.4f}"
             )
-            print(f"Epoch [{epoch + 1}/{self.epochs}] Train Acc{train_acc:.4f} Val Acc{val_acc:.4f}")
+            print(f"Epoch[{epoch + 1}/{self.epochs}]Train Acc{train_acc:.4f} Val Acc{val_acc:.4f}")
 
             if val_acc > self.best_val_acc:
                 self.best_val_acc = val_acc
@@ -155,7 +161,7 @@ class Trainer:
             train_losses=train_loss_list,
             val_losses=val_loss_list,
             train_accuracies=train_acc_list,
-            val_accuracies=val_acc_list
+            val_accuracies=val_acc_list,
         )
 
     def plot_metrics(
@@ -163,7 +169,7 @@ class Trainer:
         train_losses,
         val_losses,
         train_accuracies,
-        val_accuracies
+        val_accuracies,
     ):
         epochs_range = range(1, len(train_accuracies) + 1)
 
@@ -186,11 +192,9 @@ class Trainer:
         plt.tight_layout()
         plt.show()
 
-def quick_train(learning_rate: float = LEARNING_RATE, epochs: int = EPOCHS, batch_size: int = BATCH_SIZE) -> None:
-    trainer = Trainer(learning_rate=learning_rate, epochs=epochs, batch_size=batch_size)
+def quick_train() -> None:
+    trainer = Trainer()
     trainer.train()
 
 if __name__ == "__main__":
-    
     quick_train()
-    
