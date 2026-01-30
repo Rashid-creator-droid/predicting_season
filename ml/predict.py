@@ -10,7 +10,6 @@ from .config import (
     DEVICE, 
     MODEL_NAME,
     NUM_CLASSES, 
-    PRETRAINED,
 )
 from .eval_test import Evaluator
 from .loaders import DatasetManager
@@ -31,8 +30,7 @@ class SeasonPredictor:
 
         self.model = get_model(
             MODEL_NAME, 
-            num_classes=NUM_CLASSES, 
-            pretrained=PRETRAINED,
+            num_classes=NUM_CLASSES,
         )
         self.model.load_state_dict(torch.load(model_path, map_location=self.device))
         self.model.to(self.device)
