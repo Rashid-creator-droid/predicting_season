@@ -4,6 +4,7 @@ from datetime import datetime
 
 import torch
 
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 MODEL_NAME = "resnet18"

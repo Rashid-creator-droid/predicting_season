@@ -1,6 +1,5 @@
 import base64
 import io
-import logging
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -9,9 +8,7 @@ import torch
 from sklearn.metrics import classification_report, confusion_matrix
 from tqdm import tqdm
 
-from .config import DEVICE
-
-logger = logging.getLogger(__name__)
+from .config import DEVICE, logger
 
 
 class Evaluator:
