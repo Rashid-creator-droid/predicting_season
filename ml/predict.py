@@ -9,7 +9,8 @@ from .config import (
     CLASS_TO_IDX_PATH, 
     DEVICE, 
     MODEL_NAME,
-    NUM_CLASSES, 
+    NUM_CLASSES,
+    logger,
 )
 from .eval_test import Evaluator
 from .loaders import DatasetManager
@@ -45,17 +46,21 @@ class SeasonPredictor:
         for cls, idx in class_to_idx.items():
             self.class_names[idx] = cls
 
-    def predict(self, image: Image.Image) -> Tuple[str, float]:
+    def predict(self, image: Image.Image, filename: str = None) -> Tuple[str, float]:
         x = self.transforms(image).unsqueeze(0).to(self.device)
         with torch.no_grad():
             outputs = self.model(x)
             probabilities = torch.nn.functional.softmax(outputs[0], dim=0).cpu()
             top_prob, top_class = torch.topk(probabilities, 1)
-        return self.class_names[top_class.item()], top_prob.item()
+        class_name = self.class_names[top_class.item()]
+        probability = top_prob.item()
+        logger.info(f"{filename} - {class_name} - probabilities {probability:.4f}")
+        return class_name, probability
 
     def test_model(self) -> Tuple:
         test_loader = DatasetManager().get_test_loader()
         evaluator = Evaluator(self.model, self.device)
         cm, report, accuracy = evaluator.evaluate(test_loader)
         plot = evaluator.plot_confusion_matrix(cm, classes=self.class_names)
+        logger.info(f"Accuracy full test dataset: {accuracy:.4f}")
         return plot, accuracy

@@ -26,8 +26,7 @@ def index(request: Request):
 async def predict(file: UploadFile = File(...)):
     image_bytes = await file.read()
     image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
-
-    season, probability = predictor.predict(image)
+    season, probability = predictor.predict(image, file.filename)
     return {"season": season, "probability": probability}
 
 

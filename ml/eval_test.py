@@ -8,7 +8,7 @@ import torch
 from sklearn.metrics import classification_report, confusion_matrix
 from tqdm import tqdm
 
-from .config import DEVICE, logger
+from .config import DEVICE
 
 
 class Evaluator:
@@ -35,8 +35,6 @@ class Evaluator:
         cm = confusion_matrix(y_true, y_pred)
         report = classification_report(y_true, y_pred)
         accuracy = np.sum(np.diag(cm)) / np.sum(cm)
-
-        logger.info(f"Accuracy: {accuracy:.4f}")
         return cm, report, accuracy
 
     @staticmethod

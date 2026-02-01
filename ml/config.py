@@ -40,4 +40,5 @@ logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     filename=logs_dir,
 )
+logging.getLogger("watchfiles.main").setLevel(logging.WARNING)
 logger = logging.getLogger("logs") 
