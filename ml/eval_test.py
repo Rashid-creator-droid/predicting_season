@@ -33,9 +33,8 @@ class Evaluator:
                 y_pred.extend(predicted.cpu().numpy())
 
         cm = confusion_matrix(y_true, y_pred)
-        report = classification_report(y_true, y_pred)
         accuracy = np.sum(np.diag(cm)) / np.sum(cm)
-        return cm, report, accuracy
+        return cm, accuracy
 
     @staticmethod
     def plot_confusion_matrix(cm: np.ndarray, classes) -> str:

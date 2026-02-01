@@ -60,7 +60,7 @@ class SeasonPredictor:
     def test_model(self) -> Tuple:
         test_loader = DatasetManager().get_test_loader()
         evaluator = Evaluator(self.model, self.device)
-        cm, report, accuracy = evaluator.evaluate(test_loader)
+        cm, accuracy = evaluator.evaluate(test_loader)
         plot = evaluator.plot_confusion_matrix(cm, classes=self.class_names)
         logger.info(f"Accuracy full test dataset: {accuracy:.4f}")
         return plot, accuracy
