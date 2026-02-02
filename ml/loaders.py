@@ -3,7 +3,7 @@ from typing import Tuple
 from torch.utils.data import DataLoader
 from torchvision.datasets import ImageFolder
 
-from ml.config import BATCH_SIZE, TEST_DIR, TRAIN_DIR, VAL_DIR
+from .config import BATCH_SIZE, TEST_DIR, TRAIN_DIR, VAL_DIR
 from .transforms import get_pred_transforms
 
 
